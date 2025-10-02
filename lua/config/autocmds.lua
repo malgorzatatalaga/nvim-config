@@ -1,5 +1,10 @@
+local autocmd = vim.api.nvim_create_autocmd
+local augroup = vim.api.nvim_create_augroup
+
+local general = augroup("General", { clear = true })
+
 -- This file is automatically loaded by lazyvim.config.init.
-vim.api.nvim_create_autocmd("TextYankPost", {
+autocmd("TextYankPost", {
 	desc = "Highlight when yanking (copying) text",
 	group = vim.api.nvim_create_augroup("kickstart-highlight-yank", { clear = true }),
 	callback = function()
@@ -8,10 +13,30 @@ vim.api.nvim_create_autocmd("TextYankPost", {
 })
 
 -- Wrap text filetypes
-vim.api.nvim_create_autocmd("FileType", {
+autocmd("FileType", {
 	group = vim.api.nvim_create_augroup("wrap_text_filetype", { clear = true }),
 	pattern = { "text", "plaintex", "typst", "gitcommit", "markdown" },
 	callback = function()
 		vim.opt_local.wrap = true
+	end,
+})
+
+-- Remove trailing whitespace on save
+autocmd("BufWritePre", {
+	group = general,
+	pattern = "*",
+	callback = function()
+		local save_cursor = vim.fn.getpos(".")
+		vim.cmd([[%s/\s\+$//e]])
+		vim.fn.setpos(".", save_cursor)
+	end,
+	desc = "Remove trailing whitespace",
+})
+
+autocmd({ "FileType" }, {
+	pattern = { "gitcommit", "markdown", "NeogitCommitMessage" },
+	callback = function()
+		vim.opt_local.wrap = true
+		vim.opt_local.spell = true
 	end,
 })

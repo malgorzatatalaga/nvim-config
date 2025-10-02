@@ -18,13 +18,13 @@ return {
 		})
 
 		mason_lspconfig.setup({
-			ensure_installed = { 
+			ensure_installed = {
 				"lua_ls",
 				"rust_analyzer",
 				"pyright",
 				"gopls"
+				,"ruff"
 			},
-			
 			automatic_installation = true,
 		})
 	end,

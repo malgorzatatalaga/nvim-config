@@ -3,9 +3,9 @@ local augroup = vim.api.nvim_create_augroup
 
 local general = augroup("General", { clear = true })
 
--- This file is automatically loaded by lazyvim.config.init.
+-- Highlight on yank
 autocmd("TextYankPost", {
-	desc = "Highlight when yanking (copying) text",
+	desc = "Highlight when yanking text",
 	group = vim.api.nvim_create_augroup("kickstart-highlight-yank", { clear = true }),
 	callback = function()
 		vim.hl.on_yank()
@@ -33,8 +33,9 @@ autocmd("BufWritePre", {
 	desc = "Remove trailing whitespace",
 })
 
+-- Enable wrapping and spellcheck for .md
 autocmd({ "FileType" }, {
-	pattern = { "gitcommit", "markdown", "NeogitCommitMessage" },
+	pattern = { "markdown" },
 	callback = function()
 		vim.opt_local.wrap = true
 		vim.opt_local.spell = true
